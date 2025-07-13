@@ -1,0 +1,111 @@
+# -----  Main Apps ----- #
+
+# terminal emulator
+super + Return
+	alacritty
+
+# program launcher
+super + @space
+	$HOME/.config/rofi/launcher/launcher.sh
+
+# ----- Apps ----- #
+
+super + f
+	thunar
+
+super + b
+	brave
+
+# ----- Rofi ----- #
+
+# PowerMenu
+super + alt + p
+        $HOME/.config/rofi/powermenu/powermenu.sh
+        
+# Wallpaper Select
+alt + @space
+	$HOME/.config/rofi/wallpaper/wallpaper.sh
+
+# ----- System ----- #
+
+# Scroll Lock
+Scroll_Lock
+	$HOME/.config/sxhkd/toggle_scroll_lock.sh
+
+# Manage brightness
+alt + F2
+	brightnessctl set 5%-
+
+alt + F3
+	brightnessctl set +5%
+
+# Volume control
+alt + F6
+	amixer set Master toggle
+
+alt + F7
+	amixer set Master playback 5%-
+
+alt + F8
+	amixer set Master playback 5%+
+
+# ----- Bspwm ----- #
+
+# Reload BSPWM
+super + alt + r
+	bspc wm -r; dunstify -u low 'bspwm' 'The configuration file has been reloaded successfully!'
+
+# Clost/Kill node
+super + {_,shift + }x
+	bspc node -{c,k}
+
+# Reload sxhkd Keybinds
+super + Escape
+	pkill -USR1 -x sxhkd; dunstify -u low 'sxhkd' 'The configuration file has been reloaded successfully!'
+
+# ----- Node states and flags ----- #
+
+# Set the node state
+alt + {t,shift + t,a,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# Hide node
+alt + h
+	bspc node -g hidden
+
+# Show hidden nodes one by one
+ctrl + alt + h
+	bspc node $(bspc query -N -n .hidden.local.window | head -n1) --flag hidden=off
+
+# ----- Focus/Swap Nodes ----- #
+
+# Rotate desktop
+ctrl + Tab
+	bspc node @/ --rotate {90,-90}
+
+# Switch workspace
+super + {Left,Right}
+	bspc desktop -f {prev,next}
+
+# Focus or send to the given desktop
+super + {_,ctrl + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+# Focus the node in the given direction
+super + alt + {Left,Down,Up,Right}
+	{ DIR=west FALLBACK=prev; , DIR=south; , DIR=north; , DIR=east FALLBACK=next; } \
+	bspc node -f $DIR.!sticky.!hidden.local || bspc node -f $FALLBACK.leaf.!sticky.!hidden.local
+
+# Swap Nodes
+ctrl + alt + {Left,Down,Up,Right}
+	bspc node -s {west,south,north,east}.local
+
+# ----- Move/Resize Nodes ----- #
+
+# balance desktop's nodes
+super + ctrl + b
+	bspc node @/ -B
+
+# Move floating window
+super + shift + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
