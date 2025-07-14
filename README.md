@@ -11,5 +11,3 @@
 https://github.com/mino29/tokyo-night-grub
 
 https://github.com/ljmill/tokyo-night-icons
-
-https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme
